@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+//对象解构
+//用途:获取对象当中数据
+//特性:在等号左边...
+
+let obj = {
+  count: 0,
+  age: 20,
+  username: 'zs'
+}
+
+//赋值
+//es5
+/*
+let count = obj.count
+let age = obj.age
+*/
+//es6对象解构赋值
+// let {count, age} = obj
+
+//使用...获取剩余的对象
+// let {count, ...o } = obj
+// count = 4
+// o = {age: 20, username: 'zs'}
+// console.log(count, o)
+
+//使用:,改名称
+let {count: res} = obj
+console.log(res)
+
+</script>
+</html>

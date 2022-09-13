@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/lodash.js/4.17.21/lodash.min.js" type="application/javascript"></script>
+</head>
+<body>
+
+</body>
+<script>
+let getters = {
+  token(){ return 'abc'}
+}
+// let o = {
+//   showCount() { return 1 }
+// }
+
+//合并o和getters
+/*
+let m = {
+  ...getters,
+  ...o
+}
+*/
+// 下面这句话含义
+// 把getters合并到o当中
+// 等效于
+// let o = Object.assign({showCount(){}}, getters)
+/*
+let o = {
+  showCount() { return 1 },
+  ...getters
+}
+*/
+// 下面这句的含义(刚才getters的写法)
+// 把showCount和getters里面东西合并到o的getters当中
+let o = {
+  getters: {
+    showCount(){return 1},
+    ...getters
+  }
+}
+
+</script>
+</html>

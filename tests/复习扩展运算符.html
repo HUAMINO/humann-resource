@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/lodash.js/4.17.21/lodash.min.js" type="application/javascript"></script>
+</head>
+<body>
+
+</body>
+<script>
+//扩展运算符
+//用途:用来合并对象和数组
+//特征:在等号右边...
+
+//对象合并
+// let a = {count:0 , age: 20}
+// let b = {username: 'zs'}
+//合并a和b
+//es5
+/*
+let o = {}
+for(var k in a){
+  o[k] = a[k]
+}
+for(var k in b){
+  o[k] = b[k]
+}
+*/
+
+//es6
+// let o = Object.assign({},b, a)
+// let o = {...a, ...b} //推荐
+
+//loadash
+// let o = _.assign({}, a, b)
+// console.log(o)
+
+//数组合并
+let a = [1,2]
+let b = [3,4]
+
+//方式1-通过concat
+// let o = a.concat(b)
+// console.log(o)
+
+//方式2-通过push,要对原来数组有影响
+// a.push(...b)
+// a.push(3, 4)
+
+//方式3-通过扩展运算符(推荐)
+let o = [...a,...b]
+console.log(o)
+
+</script>
+</html>

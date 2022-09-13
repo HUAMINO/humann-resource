@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 在原生标签上使用 -->
+    <!-- <input @keyup="onKeyup"/> -->
+    <!-- 监听回车事件-方式2-按键修饰符 -->
+    <!-- <input @keyup.13="onKeyup"/> -->
+    <!-- <input @keyup.enter="onKeyup"/> -->
+    <!-- 在组件上使用 -->
+    <!-- 监听子组件事件-方式1,父子通信 -->
+    <!-- 注意:.enter不能作用于父子通信,作用于原生dom事件 -->
+    <!-- <el-input @keyup.enter="onKeyup"></el-input> -->
+    <!-- 监听子组件事件-方式2,原生事件冒泡 -->
+    <!-- <div @keyup.enter="onKeyup">
+      <el-input></el-input>
+    </div> -->
+    <el-input @keyup.enter.native="onKeyup"></el-input>
+  </div>
+</body>
+<script>
+
+  Vue.component('el-input', {
+    template: `
+      <input @keyup="$emit('keyup')"></input>
+    `
+  })
+  let vm = new Vue({
+    el: '#app',
+    methods: {
+      onKeyup(e){
+        //监听回车事件-方式1-判断原生事件对象keyCode
+        // if(e.keyCode === 13){
+        //   console.log('点击了回车')
+        // }
+        // console.log('点击了')
+        console.log('点击了回车')
+      }
+    }
+  })
+</script>
+</html>

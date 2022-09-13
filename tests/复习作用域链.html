@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+//什么是作用域:变量使用范围
+//有哪些作用域:全局作用域window,块级作用域,函数作用域
+//哪些东西叫块级作用域:let,const定义变量在for和if的花括号里面
+/*
+for(){
+  var a = 123 //var没有块级作用域
+  let b = 123
+}
+if(){
+
+}
+*/
+//作用域链:查找变量的顺序,从最近的作用域查找变量,找到截止了
+//login在全局
+function login(){
+  console.log(1)
+}
+//o在全局
+//这里{}不是块级作用域,它是对象的{}
+let o = {
+  //login在哪里?在全局变量o里面
+  login(){
+    console.log(2)
+  },
+  submit(){
+    //查找login的顺序
+    //在函数作用域,submit方法里面找
+    //在全局的作用域
+    login() //1
+    // o.login() //2
+
+    //this执行调用者
+    //调用者下面o.submit,this==o
+    // this.login()//2
+  }
+}
+
+o.submit()
+</script>
+</html>

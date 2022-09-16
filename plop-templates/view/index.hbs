@@ -1,0 +1,33 @@
+{{#if template}}
+<template>
+  <div class="dashboard-container">
+    <div class="app-container">
+      <h2>
+        {{ title }}
+      </h2>
+    </div>
+  </div>
+</template>
+{{/if}}
+
+{{#if script}}
+<script>
+export default {
+  name: '{{ properCase name }}',
+  components: {},
+  props: {},
+  data() {
+    return {}
+  },
+  created() {},
+  mounted() {},
+  methods: {}
+}
+</script>
+{{/if}}
+
+{{#if style}}
+<style lang="scss" scoped>
+
+</style>
+{{/if}}

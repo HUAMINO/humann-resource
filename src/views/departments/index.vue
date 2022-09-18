@@ -12,20 +12,21 @@
           <el-col>左</el-col>
           <el-col>右</el-col>
         </el-row> -->
-          <tree-tool :data='company'>
-            <el-dropdown-item>添加子部门</el-dropdown-item>
-          </tree-tool>
-          <el-tree :data="list" :props="{label: 'name'}" default-expand-all>
-            <template v-slot="{data}">
-              <tree-tool :data="data">
-                <el-dropdown-item @click.native="onAdd">添加子部门</el-dropdown-item>
-                <el-dropdown-item @click.native="onEdit">编辑部门  </el-dropdown-item>
-                <el-dropdown-item @click.native="onDel">删除部门</el-dropdown-item>
-              </tree-tool>
-            </template>
-          </el-tree>
-        </el-card>
+        <tree-tool :data="company">
+          <el-dropdown-item>添加子部门</el-dropdown-item>
+        </tree-tool>
+        <el-tree :data="list" :props="{label: 'name'}" default-expand-all>
+          <template v-slot="{data}">
+            <tree-tool :data="data">
+              <el-dropdown-item @click.native="onAdd(data)">添加子部门</el-dropdown-item>
+              <el-dropdown-item @click.native="onEdit(data.id)">编辑部门  </el-dropdown-item>
+              <el-dropdown-item @click.native="onDel(data.id)">删除部门</el-dropdown-item>
+            </tree-tool>
+          </template>
+        </el-tree>
+      </el-card>
     </div>
+    <add-dept @success="getList" :visible.sync="showDialog" :node="currentNode"></add-dept>
   </div>
 </template>
 
@@ -33,15 +34,19 @@
 import TreeTool from './comoonents/tree-tool.vue'
 import { getList } from '@/api/department'
 import { trnslateListToTree } from '@/utils'
+import AddDept from './comoonents/add-dept.vue'
 
 export default {
   name: 'Departments',
   components: {
-    TreeTool
+    TreeTool,
+    AddDept
   },
   props: {},
   data() {
     return {
+      currentNode: {}, // 当前操作的父部门
+      showDialog: false,
       list: [],
       company: {
         name: '',
@@ -59,8 +64,9 @@ export default {
       this.company.name = companyName
       this.list = trnslateListToTree(depts, '')
     },
-    onAdd(id) {
-      console.log('添加')
+    onAdd(node) {
+      this.showDialog = true
+      this.currentNode = node
     },
     onDel(id) {
       console.log('删除')

@@ -6,3 +6,12 @@ export function getList() {
     url: '/company/department'
   })
 }
+
+// 添加内容
+export function addDept(data) {
+  return request({
+    method: 'post',
+    url: '/company/department',
+    data
+  })
+}

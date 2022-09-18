@@ -1,16 +1,26 @@
 import request from '@/utils/request'
 
+// 登录
 export function login(data) {
   return request({
-    method: 'post',
-    // url: '/sys/login',
-    // 模拟服务器转态不为200的错误
-    url: '/sys/login1111',
+    method: 'POST',
+    url: '/sys/login',
     data
   })
 }
 
-export function getInfo(token) {
+// 获取用户基本资料
+export function getUserBaseInfo() {
   return request({
+    method: 'post',
+    url: '/sys/profile'
+  })
+}
+
+// 获取员工基本信息
+export function getEmplyeeBaseInfo(id) {
+  return request({
+    method: 'get',
+    url: '/sys/user/' + id
   })
 }

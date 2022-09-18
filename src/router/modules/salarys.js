@@ -3,7 +3,7 @@ export default {
   path: '/salarys',
   component: Layout,
   children: [{
-    // 默认路径,访问父路由/salarys直接方法这个子路由
+    // 默认路径,访问父路由/salarys 直接方法这个子路由
     path: '',
     name: 'salarys',
     component: () => import('@/views/salarys/index.vue'),

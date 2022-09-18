@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <my-component>
+      <template v-slot="{ username }">
+        {{username}}
+      </template>
+    </my-component>
+  </div>
+</body>
+<script>
+  // 通过子传父,$emit发消息
+  Vue.component('my-component', {
+    data() {
+      return {
+        username: 'zs'
+      }
+    },
+    template: `
+      <div>子组件
+      <slot :username="username"></slot>
+      </div>
+    `
+  })
+  let vm = new Vue({
+    el: '#app'
+  })
+</script>
+</html>

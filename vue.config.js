@@ -35,6 +35,12 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
+    },
+    proxy: {
+      '/api': {
+        target: 'http://ihrm-java.itheima.net',
+        changeOrigin: true // 只有这个值为true时 才表示开启跨域
+      }
     }
     // before: require('./mock/mock-server.js')
   },

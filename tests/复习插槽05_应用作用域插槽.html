@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <el-tree :data="list">
+      <template v-slot="{data, index}"><div>{{index}}-{{data.name}}</div></template>
+    </el-tree>
+  </div>
+</body>
+<script>
+  Vue.component('el-tree', {
+    props: ['data'],
+    template: `
+      <div>
+      <ul>
+        <li v-for="(item, index) in data">
+          <slot :data="item" :index="index">{{item.name}}</slot>
+        </li>
+      </ul>
+      </div>
+    `
+  })
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+        list: [
+          {name: 'zs', age: 20},
+          {name: 'ls', age: 30}
+        ]
+      }
+    },
+  })
+</script>
+</html>

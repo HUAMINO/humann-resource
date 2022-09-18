@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'rzzt_token'
+const TokenKey = 'rz_token'
 
 export function getToken() {
   return Cookies.get(TokenKey)

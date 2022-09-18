@@ -7,15 +7,15 @@ import user from './modules/user'
 
 Vue.use(Vuex)
 
+// 定义模块
 const test = {
-  // 命名空间,指定模块名来调用方法
   namespaced: true,
   state: {
     token: null
   },
   mutations: {
     setToken(state, token) {
-      console.log('test模块的setToken')
+      console.log('test的setToken')
       state.token = token
     }
   }
@@ -28,53 +28,46 @@ const store = new Vuex.Store({
     user,
     test
   },
-  // 定义计算属性
   getters: {
-    /*
-    showCount(state) {
-      return 'count=' + state.count
-    }
-    */
-    // 用箭头函数简化
+    // showCount(state) {
+    //   return 'count=' + state.count
+    // }
     showCount: state => 'count=' + state.count,
     ...getters
+
   },
-  // 定义数据
+
   state: {
-    count: 0,
-    age: 20
+    count: 1,
+    age: 0
   },
-  // 定义同步方法
   mutations: {
     setToken() {
       console.log('根模块的setToken')
     },
     add(state) {
-      // 需要通过state参数修改数据
       state.count++
     },
-    // 传参
-    addN(state, num) {
-      state.count += num
-    }
-  },
-  // 定义异步方法
-  actions: {
-    addSync(context) {
-      // context等同于$store
-      setTimeout(() => {
-        // 需要调用mutations,然后修改数据
-        context.commit('add')
-        // 在页面当中$store.commit('add')
-      }, 500)
+    addAge(state) {
+      state.age++
     },
     // 传参
-    addNSync(context, num) {
-      // context等同于$store
+    addN(state, number) {
+      state.count += number
+    }
+  },
+  // 在actions里面是用来进行异步操作 比如发送ajax请求,定时器等
+  actions: {
+    addSync(context, b) {
       setTimeout(() => {
-        // 需要调用mutations,然后修改数据
-        context.commit('addN', num)
-      }, 500)
+        context.commit('add')
+      }, 1000)
+    },
+    // 传参
+    addNSync(context, number) {
+      setTimeout(() => {
+        context.commit('addN', number)
+      }, 1000)
     }
   }
 })

@@ -43,36 +43,32 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" class="loginBtn" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
       <div class="tips">
         <span style="margin-right:20px;">账号: 13800000002</span>
         <span> 密码: 123456</span>
       </div>
-
     </el-form>
   </div>
 </template>
 
 <script>
-import { login } from '@/api/user'
-
 export default {
   name: 'Login',
   data() {
     return {
       loginForm: {
-        mobile: 'admin',
-        password: '111111'
+        mobile: '13800000002',
+        password: '123456'
       },
       loginRules: {
         mobile: [
-          { required: true, trigger: 'blur', message: '亲输入手机号' },
-          { pattern: /^1[3-9]\d{9}$/, trigger: 'blur', message: '请输入正确的手机号' }
+          { required: true, trigger: 'blur', message: '请输入手机号' },
+          { pattern: /^1[3-9]\d{9}$/, trigger: 'blur', message: '请输入正确的手机号码' }
         ],
         password: [
-          { required: true, trigger: 'blur', message: '亲输入密码' },
-          { min: 6, max: 16, trigger: 'blur', message: '请输入6-16为的密码' }
+          { required: true, trigger: 'blur', message: '请输入密码' },
+          { min: 6, max: 16, message: '密码的长度在6-16位之间 ', trigger: 'blur' }
         ]
       },
       loading: false,
@@ -101,7 +97,9 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(async valid => {
-        this.$store.dispatch('user/login', this.loginForm)
+        // this.$store.dispatch('user/login', this.loginForm)
+        await this.$store.dispatch('user/login', this.loginForm)
+        this.$router.push('/')
       })
     }
   }
@@ -113,8 +111,9 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
-$light_gray:#68b0fe;
+$light_gray:#fff;
 $cursor: #fff;
+$light_gray: #68b0fe;  // 将输入框颜色改成蓝色
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -158,11 +157,11 @@ $cursor: #fff;
     color: #fff
   }
   .loginBtn {
-    background: #407ffe;
-    height: 64px;
-    line-height: 32px;
-    font-size: 24px;
-  }
+  background: #407ffe;
+  height: 64px;
+  line-height: 32px;
+  font-size: 24px;
+}
 }
 </style>
 

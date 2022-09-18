@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+// pid是parentId的简写,父id
+let list = [
+  {id: 1, name: '节点1', pid: ''},
+  {id:11, name: '节点1-1', pid: 1},
+  {id:111, name: '节点1-1-1', pid: 11},
+  {id:12, name: '节点1-2', pid: 1},
+  {id: 2, name: '节点2', pid: ''}
+]
+// 简化写法 不用递归方法
+// list.forEach(t => {
+//   let children = list.filter(m=> m.pid === t.id)
+//   if(children.length > 0) {
+//     t.children = children
+//   }
+// })
+//
+// let result = list.filter(t => t.pid === '')
+// console.log(list, result)
+
+// 转换方式二 ，使用递归的方式来实现功能
+// 纯在的问题，访问list是全局变量，代表只能处理全局list
+// function trnslateListToTree(pid) {
+//   // let children = list.filter(t.id === pid)
+//   let arr = []
+//   list.forEach(t => {
+//     if(t.pid === pid) {
+//       let children = trnslateListToTree(t.id)
+//       if (children.length > 0) {
+//         t.children = children
+//       }
+//       arr.push(t)
+//     }
+//   })
+//   return arr
+// }
+// let result = trnslateListToTree('')
+// console.log(result)
+
+// 方式三，用递归，完整写法，多穿参数，避免用全局数据
+function trnslateListToTree(l, pid) {
+  // let children = list.filter(t.id === pid)
+  let arr = []
+  l.forEach(t => {
+    if(t.pid === pid) {
+      let children = trnslateListToTree(l, t.id)
+      if (children.length > 0) {
+        t.children = children
+      }
+      arr.push(t)
+    }
+  })
+  return arr
+}
+let result = trnslateListToTree(list, '')
+console.log(result)
+</script>
+</html>

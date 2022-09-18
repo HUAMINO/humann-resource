@@ -6,41 +6,14 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
-/**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
- */
-
-/**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
- */
+// 静态路由
 export const constantRoutes = [
   {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
-  {
-    path: '/learnVuex',
-    component: () => import('@/views/learnVuex/index'),
-    hidden: true
-  },
+
   {
     path: '/404',
     component: () => import('@/views/404'),
@@ -48,24 +21,50 @@ export const constantRoutes = [
   },
 
   {
-    path: '/',
+    // 首页
+    path: '/', // 默认根路由      // 浏览器url#后的路径如果检测到是'/' 那么触发重定向属性  找到该属性后配置新的路径 进行自动跳转
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/dashboard', // 路由重定向属性
     children: [{
-      path: 'dashboard',
+      path: '/dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true },
+  {
+    path: '/learnVuex',
+    component: () => import('@/views/learnVuex/index'),
+    hidden: true
+  }
+]
+
+// 动态路由
+import employees from './modules/employees.js'
+import approvals from './modules/approvals.js'
+import attendances from './modules/attendances'
+import departments from './modules/departments.js'
+import permission from './modules/permission.js'
+import salarys from './modules/salarys.js'
+import setting from './modules/setting.js'
+import social from './modules/social.js'
+export const asyncRoutes = [
+  employees,
+  approvals,
+  attendances,
+  departments,
+  permission,
+  salarys,
+  setting,
+  social
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: [...constantRoutes, ...asyncRoutes]
 })
 
 const router = createRouter()

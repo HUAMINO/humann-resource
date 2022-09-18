@@ -115,3 +115,18 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+export function trnslateListToTree(l, pid) {
+  // let children = list.filter(t.id === pid)
+  const arr = []
+  l.forEach(t => {
+    if (t.pid === pid) {
+      const children = trnslateListToTree(l, t.id)
+      if (children.length > 0) {
+        t.children = children
+      }
+      arr.push(t)
+    }
+  })
+  return arr
+}

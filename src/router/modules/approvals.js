@@ -3,7 +3,7 @@ export default {
   path: '/approvals',
   component: Layout,
   children: [{
-    // 默认路径,访问父路由/approvals直接方法这个子路由
+    // 默认路径,访问父路由/approvals  直接方法这个子路由
     path: '',
     name: 'approvals',
     component: () => import('@/views/approvals/index.vue'),

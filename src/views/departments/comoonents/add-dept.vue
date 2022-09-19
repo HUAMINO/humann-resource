@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :visible="visible" v-bind="$attrs" title="新增部门" v-on="$listeners" @open="onOpen" @close="onClose">
+    <el-dialog :visible="visible" v-bind="$attrs" :title=" form.id? '编辑部门' : '新增部门'" v-on="$listeners" @open="onOpen" @close="onClose">
       <el-form ref="formRef" :model="form" :rules="rules" size="medium" label-width="120px">
         <el-form-item label="部门名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入部门名称" clearable :style="{width: '100%'}">
@@ -39,7 +39,7 @@
 </template>
 <script>
 import { getEmployeeSimple } from '@/api/employees'
-import { addDept, getList } from '@/api/department'
+import { addDept, getList, UpdateDept } from '@/api/department'
 export default {
   components: {},
   inheritAttrs: false,
@@ -54,12 +54,18 @@ export default {
     }
   },
   data() {
-    const checkName = (rule, value, callback) => {
+    const checkName = async(rule, value, callback) => {
       // 同级部门中禁止出现重复部门
       // 理解：当前添加的部门名称不能和兄弟们重名
       // 当前添加的部门名称：value/ this.from.name
       // 兄弟部门this.node.children
-      const brothers = this.node.children || []
+      let brothers
+      if (this.form.id) {
+        const allDepts = (await getList()).depts
+        brothers = allDepts.filter(t => t.pid === this.form.pid && t.id !== this.form.id)
+      } else {
+        brothers = this.node.children || []
+      }
       const f = brothers.find(t => t.name === value)
       if (!f) {
         callback()
@@ -67,9 +73,14 @@ export default {
         callback(new Error('存在重复名称的兄弟部门'))
       }
     }
-    async function checkCode(rule, value, callback) {
+    const checkCode = async(rule, value, callback) => {
       const allDepts = (await getList()).depts
-      const f = allDepts.find(t => t.code === value)
+      let f
+      if (this.form.id) {
+        f = allDepts.filter(t => t.id !== this.form.id).find(t => t.code === value)
+      } else {
+        f = allDepts.find(t => t.code === value)
+      }
       if (!f) {
         callback()
       } else {
@@ -128,7 +139,14 @@ export default {
   methods: {
     onOpen() {},
     onClose() {
+      // 对整个表单进行重置
       this.$refs['formRef'].resetFields()
+      this.form = {
+        name: undefined,
+        code: undefined,
+        manager: undefined,
+        introduce: undefined
+      }
     },
     close() {
       this.$emit('update:visible', false)
@@ -136,10 +154,14 @@ export default {
     handelConfirm() {
       this.$refs['formRef'].validate(async valid => {
         if (!valid) return
-        await addDept({
-          ...this.form,
-          pid: this.node.id
-        })
+        if (this.form.id) {
+          await UpdateDept(this.form)
+        } else {
+          await addDept({
+            ...this.form,
+            pid: this.node.id
+          })
+        }
         this.$message.success('操作成功')
         this.$emit('success')
         this.close()

@@ -15,3 +15,27 @@ export function addDept(data) {
     data
   })
 }
+// 删除内容
+export function delDept(id) {
+  return request({
+    method: 'delete',
+    url: '/company/department/' + id
+  })
+}
+
+// 编辑获取的id
+export function getDeptById(id) {
+  return request({
+    method: 'get',
+    url: '/company/department/' + id
+  })
+}
+
+// 编辑获功能的实现
+export function UpdateDept(data) {
+  return request({
+    method: 'put',
+    url: '/company/department/' + data.id,
+    data
+  })
+}

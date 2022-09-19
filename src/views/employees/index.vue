@@ -1,9 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <h2>
-        员工
-      </h2>
+      <PageTool></PageTool>
     </div>
   </div>
 </template>

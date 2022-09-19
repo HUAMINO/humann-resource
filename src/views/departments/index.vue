@@ -15,24 +15,24 @@
         <tree-tool :data="company">
           <el-dropdown-item>添加子部门</el-dropdown-item>
         </tree-tool>
-        <el-tree :data="list" :props="{label: 'name'}" default-expand-all>
+        <el-tree v-loading="isLoading" :data="list" :props="{label: 'name'}" default-expand-all>
           <template v-slot="{data}">
             <tree-tool :data="data">
               <el-dropdown-item @click.native="onAdd(data)">添加子部门</el-dropdown-item>
-              <el-dropdown-item @click.native="onEdit(data.id)">编辑部门  </el-dropdown-item>
+              <el-dropdown-item @click.native="onEdit(data)">编辑部门  </el-dropdown-item>
               <el-dropdown-item @click.native="onDel(data.id)">删除部门</el-dropdown-item>
             </tree-tool>
           </template>
         </el-tree>
       </el-card>
     </div>
-    <add-dept @success="getList" :visible.sync="showDialog" :node="currentNode"></add-dept>
+    <add-dept ref="addDeptRef" :visible.sync="showDialog" :node="currentNode" @success="getList"></add-dept>
   </div>
 </template>
 
 <script>
 import TreeTool from './comoonents/tree-tool.vue'
-import { getList } from '@/api/department'
+import { delDept, getDeptById, getList } from '@/api/department'
 import { trnslateListToTree } from '@/utils'
 import AddDept from './comoonents/add-dept.vue'
 
@@ -45,6 +45,7 @@ export default {
   props: {},
   data() {
     return {
+      isLoading: false,
       currentNode: {}, // 当前操作的父部门
       showDialog: false,
       list: [],
@@ -60,19 +61,35 @@ export default {
   mounted() {},
   methods: {
     async getList() {
+      this.isLoading = true
       const { companyName, depts } = await getList()
       this.company.name = companyName
       this.list = trnslateListToTree(depts, '')
+      this.isLoading = false
     },
     onAdd(node) {
       this.showDialog = true
       this.currentNode = node
     },
     onDel(id) {
-      console.log('删除')
+      console.log('删除', id)
+      this.$confirm('确认删除？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async action => {
+          console.log('删除2', id)
+          await delDept(id)
+          this.$message.success('操作陈宫')
+          this.getList()
+        }).catch(() => {
+        })
     },
-    onEdit() {
-      console.log('编辑')
+    async onEdit(node) {
+      this.currentNode = node
+      this.$refs.addDeptRef.form = await getDeptById(node.id)
+      this.showDialog = true
     }
   }
 }

@@ -16,6 +16,11 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import '@/directives/index' // 引入自定义图片加载失败指令
 
+// 引入全局组件
+// import '@/components'
+// 高级写法
+import Ui from '@/components'
+Vue.use(Ui)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

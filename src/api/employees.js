@@ -6,3 +6,10 @@ export function getEmployeeSimple() {
     url: '/sys/user/simple'
   })
 }
+export function getEmployees(params) {
+  return request({
+    method: 'get',
+    url: '/sys/user',
+    params
+  })
+}

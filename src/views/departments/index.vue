@@ -79,7 +79,6 @@ export default {
         type: 'warning'
       })
         .then(async action => {
-          console.log('删除2', id)
           await delDept(id)
           this.$message.success('操作陈宫')
           this.getList()

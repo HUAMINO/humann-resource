@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/lodash.js/4.17.21/lodash.min.js" type="application/javascript"></script>
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    //原始数据格式
+    let rows = [
+      {
+        id: "1063705989926227968",
+        mobile: "13800000002",
+        username: "管理员",
+        password: "c8b7722b1139bb9b346409e503302e82",
+        enableState: 1,
+        createTime: "2018-11-17T16:10:45.000+0000",
+        companyId: "1",
+        companyName: "传智播客",
+        departmentId: "1175310929766055936",
+        timeOfEntry: "2018-11-02T08:00:00.000+0000",
+        formOfEmployment: 1,
+        workNumber: "9002",
+        formOfManagement: null,
+        workingCity: null,
+        correctionTime: "2018-11-30T00:00:00.000+0000",
+        inServiceStatus: 1,
+        departmentName: "总裁办",
+        level: "coAdmin",
+        staffPhoto:
+          "https://hr-project-80-1314002096.cos.ap-nanjing.myqcloud.com/1663810629494",
+      },
+      {
+        id: "1066370498633486336",
+        mobile: "13800000003",
+        username: "孙财",
+        password: "14af10ffa3798486632a79cbbf469376",
+        enableState: 1,
+        createTime: null,
+        companyId: "1",
+        companyName: "传智播客",
+        departmentId: "1175311466846683136",
+        timeOfEntry: "2018-11-04T08:00:00.000+0000",
+        formOfEmployment: 1,
+        workNumber: "111",
+        formOfManagement: null,
+        workingCity: null,
+        correctionTime: "2018-11-20T00:00:00.000+0000",
+        inServiceStatus: 1,
+        departmentName: "市场部",
+        level: "user",
+        staffPhoto:
+          "http://pkbivgfrm.bkt.clouddn.com/1066370498633486336?t=1545812322518",
+      },
+    ];
+    //目标数据格式
+    // 满足条件
+    // (1)部分字段:姓名,手机号,入职日期,聘用形式,转正日期,工号,部门
+    // (2)二维数组,存放值
+    /*
+    let data = [
+      ["管理员","13800000002","2018-11-02T08:00:00.000+0000", '...'],
+      ['...']
+    ]
+    */
+    // let item = _.pick(rows[0],['username','mobile', 'timeOfEntry'])
+    // console.log(item)
+    // console.log(Object.values(item))
+    //
+    // let a = [1,2,3]
+    // let b = a.map(t=> t * 2)
+    // console.log(b)
+
+    const headers = {
+      '姓名': 'username',
+      '手机号': 'mobile',
+      '入职日期': 'timeOfEntry',
+      '聘用形式': 'formOfEmployment',
+      '转正日期': 'correctionTime',
+      '工号': 'workNumber',
+      '部门': 'departmentName'
+    }
+    const values = Object.values(headers)
+    const data = rows.map(t=>{
+      const item = _.pick(t, values)
+      return Object.values(item)
+    })
+
+  // //  简写
+  //   let data = row.map(t=> Object.values(_.pick(t, Object.values(headers))))
+  </script>
+</html>

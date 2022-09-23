@@ -19,7 +19,15 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
+  {
+    path: '/import',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '',
+      component: () => import('@/views/import/index')
+    }]
+  },
   {
     // 首页
     path: '/', // 默认根路由      // 浏览器url#后的路径如果检测到是'/' 那么触发重定向属性  找到该属性后配置新的路径 进行自动跳转

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+//原始数据
+let header = ["手机号","姓名","入职日期","转正日期","工号"]
+let results = [{
+  "手机号":13941130879,
+  "姓名":"高大山",
+  "入职日期":43535,
+  "转正日期":43719,
+  "工号":20089}]
+
+const userRelations = {
+  '入职日期': 'timeOfEntry',
+  '手机号': 'mobile',
+  '姓名': 'username',
+  '转正日期': 'correctionTime',
+  '工号': 'workNumber'
+}
+
+let item = {}
+for (var key in results[0]) {
+  let value = results[0][key]
+  let newKey = userRelations[key]
+  console.log(newKey)
+//   方式：1
+//   item[newKey] = value
+}
+
+let data = results.map(t=>{
+  let item = {}
+  for (let k in t ){
+    item[userRelations[k]] = t[k]
+  }
+  return item
+})
+console.log(data)
+//目标数据
+// let = data = [{mobile: '13941130879','username': '高大山', '...'}, {...}]
+</script>
+</html>

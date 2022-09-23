@@ -4,8 +4,8 @@
       <PageTool>
         <span slot="before">共{{ page.total }}条数据</span>
         <template #after>
-          <el-button type="danger" size="small">Excel导出</el-button>
-          <el-button type="success" size="small">Excel导入</el-button>
+          <el-button type="danger" size="small" @click="onExport">Excel导出</el-button>
+          <el-button type="success" size="small" @click="$router.push('/import')">Excel导入</el-button>
           <el-button type="primary" size="small" @click="showAddDialog= true">新增员工</el-button>
         </template>
       </PageTool>
@@ -44,12 +44,14 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" :sortable="true" prop="" width="280">
-            <el-button type="text">查看</el-button>
-            <el-button type="text">转正</el-button>
-            <el-button type="text">调岗</el-button>
-            <el-button type="text">离职</el-button>
-            <el-button type="text">角色</el-button>
-            <el-button type="text">删除</el-button>
+            <template v-slot="{row}">
+              <el-button type="text" @click="$router.push('/employees/detail/' + row.id)">查看</el-button>
+              <el-button type="text">转正</el-button>
+              <el-button type="text">调岗</el-button>
+              <el-button type="text">离职</el-button>
+              <el-button type="text">角色</el-button>
+              <el-button type="text" @click="onDel(row.id)">删除</el-button>
+            </template>
           </el-table-column>
         </el-table>
         <el-row type="flex" justify="end">
@@ -101,7 +103,7 @@
         <el-form-item label="部门" prop="departmentName">
           <el-input v-model="form.departmentName" placeholder="请输入部门" clearable :style="{width: '100%'}" @focus="getDeptsList">
           </el-input>
-          <el-tree :data="depts" :props="{label: 'name'}"></el-tree>
+          <el-tree v-if="showTree" :data="depts" :props="{label: 'name'}" @node-click="handleNodeClick"></el-tree>
         </el-form-item>
         <el-form-item label="转正时间" prop="correctionTime">
           <el-date-picker
@@ -119,15 +121,18 @@
         <el-button type="primary" @click="handelConfirm">确定</el-button>
       </el-row>
     </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { getEmployees } from '@/api/employees'
+import { addEmployee, getEmployees, delEmployee } from '@/api/employees'
 import QrcodeVue from 'qrcode.vue'
 import employeesEnum from '@/api/constant/employees'
 import { getList } from '@/api/department'
 import { trnslateListToTree } from '@/utils'
+import _ from 'lodash'
+import { formatdate, formatHireType } from '@/filter'
 
 export default {
   name: 'Employees',
@@ -142,7 +147,7 @@ export default {
       list: [],
       page: {
         page: 1,
-        size: 2,
+        size: 10,
         total: 0
       },
       showQrCodeDialog: false,
@@ -187,12 +192,13 @@ export default {
         departmentName: [{
           required: true,
           message: '请输入部门',
-          trigger: 'blur'
+          trigger: 'change'
         }],
         correctionTime: []
       },
       formOfEmploymentOptions: employeesEnum.hireType,
-      depts: []
+      depts: [],
+      showTree: false
     }
   },
   created() {
@@ -204,6 +210,7 @@ export default {
       const { total, rows } = await getEmployees(this.page)
       this.page.total = total
       this.list = rows
+      this.showTree = false
     },
     onPageChange(value) {
       this.page.page = value
@@ -219,14 +226,66 @@ export default {
       this.showAddDialog = false
     },
     handelConfirm() {
-      this.$refs['formRef'].validate(valid => {
+      this.$refs['formRef'].validate(async valid => {
         if (!valid) return
+        await addEmployee(this.form)
+        this.$message.success('操作成功')
+        this.getList()
         this.close()
       })
     },
     async getDeptsList() {
       this.depts = trnslateListToTree((await getList()).depts, '')
-      console.log(this.depts)
+      // console.log(this.depts)
+      this.showTree = true
+    },
+    handleNodeClick(data) {
+      this.form.departmentName = data.name
+      this.showTree = false
+    },
+    onDel(id) {
+      this.$confirm('确认删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async action => {
+        await delEmployee(id)
+        this.$message.success('操作成功')
+        this.getList()
+      })
+    },
+    onExport() {
+      import('@/vendor/Export2Excel').then(async excel => {
+        const headers = {
+          '姓名': 'username',
+          '手机号': 'mobile',
+          '入职日期': 'timeOfEntry',
+          '聘用形式': 'formOfEmployment',
+          '转正日期': 'correctionTime',
+          '工号': 'workNumber',
+          '部门': 'departmentName'
+        }
+        const { rows } = await getEmployees({
+          page: 1,
+          size: this.page.total
+        })
+        const values = Object.values(headers)
+        const data = rows.map(t => {
+          const item = _.pick(t, values)
+          item.timeOfEntry = formatdate(item.timeOfEntry)
+          item.correctionTime = formatdate(item.correctionTime)
+          item.formOfEmployment = formatHireType(item.formOfEmployment)
+          return Object.values(item)
+        })
+        console.log(rows)
+        excel.export_json_to_excel({
+          header: Object.keys(headers), // 表头 必填
+          data: data, // 具体数据 必填
+          filename: 'excel-list', // 非必填
+          autoWidth: true, // 非必填
+          bookType: 'xlsx' // 非必填
+        })
+      })
     }
   }
 }

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <my-input @input="onInput" @keyup="onKeyup" @keydown="onKeyDown"></my-input>
+  </div>
+</body>
+<script>
+  // $listeners针对组件,父组件监听事件
+  /*不使用$listeners*/
+  /*
+  Vue.component('my-input', {
+    template: `
+      <div>
+        <input @input="$emit('input')" @keyup="$emit('keyup')"/>
+      </div>
+    `,
+    mounted() {
+      console.log('$listeners', this.$listeners)
+    },
+  })
+  */
+/*使用$listeners*/
+  Vue.component('my-input', {
+    template: `
+      <div>
+        <input v-on="$listeners"/>
+      </div>
+    `,
+    mounted() {
+      console.log('$listeners', this.$listeners)
+    },
+  })
+
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+      }
+    },
+    methods: {
+      onInput(){
+        console.log('input')
+      },
+      onKeyup(){
+        console.log('onKeyup')
+      },
+      onKeyDown(){
+        console.log('onKeyDown')
+      }
+    }
+  })
+</script>
+</html>

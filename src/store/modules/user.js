@@ -1,4 +1,4 @@
-import { getEmplyeeBaseInfo, login, getUserBaseInfo } from '@/api/user'
+import { getEmplyeeBaseInfo, getUserBaseInfo, login } from '@/api/user'
 import { getToken, removeToken, setToken } from '@/utils/auth'
 // import { Message } from 'element-ui'
 

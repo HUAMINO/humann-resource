@@ -58,7 +58,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
-
+            <upload-image ref="userInfoStaffPhotoRef"></upload-image>
           </el-form-item>
         </el-col>
       </el-row>
@@ -67,7 +67,6 @@
         <el-col :span="12">
           <el-button type="primary" @click="saveUser">保存更新</el-button>
           <el-button @click="$router.back()">返回</el-button>
-
         </el-col>
       </el-row>
     </el-form>
@@ -90,6 +89,7 @@
 
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+          <upload-image ref="formDataStaffPhotoRef"></upload-image>
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -284,8 +284,11 @@
 <script>
 import EmployeeEnum from '@/api/constant/employees'
 import { getEmplyeeBaseInfo, getPersonalDetail, saveUserDetailById, updatePersonal } from '@/api/user'
-
+import UploadImage from '@/components/UploadImage/index.vue'
 export default {
+  components: {
+    UploadImage
+  },
   data() {
     return {
       userId: this.$route.params.id,
@@ -358,15 +361,37 @@ export default {
   },
   async created() {
     this.userInfo = await getEmplyeeBaseInfo(this.userId)
+    if (this.userInfo.staffPhoto) {
+      this.$refs.userInfoStaffPhotoRef.fileList = [{ url: this.userInfo.staffPhoto }]
+    }
     this.formData = await getPersonalDetail(this.userId)
+    if (this.formData.staffPhoto) {
+      this.$refs.formDataStaffPhotoRef.fileList = [{ url: this.userInfo.staffPhoto }]
+    }
   },
   methods: {
     async saveUser() {
+      const { showPercent, fileList } = this.$refs.userInfoStaffPhotoRef
+      if (showPercent) {
+        this.$message.error('图片正在上传中')
+        return
+      }
+      if (fileList.length > 0) {
+        this.userInfo.staffPhoto = fileList[0].url
+      }
       await saveUserDetailById(this.userInfo)
       this.$message.success('操作陈宫')
     },
     async savePersonal() {
+      const { showPercent, fileList } = this.$refs.formDataStaffPhotoRef
       await updatePersonal(this.formData)
+      if (showPercent) {
+        this.$message.error('图片正在上传中')
+        return
+      }
+      if (fileList.length > 0) {
+        this.formData.staffPhoto = fileList[0].url
+      }
       this.$message.success('操作陈宫')
     }
   }

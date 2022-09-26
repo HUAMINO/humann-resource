@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <my-input v-if="showInput" ref="myInputRef"></my-input>
+    <button @click="onFocus">按钮</button>
+  </div>
+</body>
+<script>
+  Vue.component('my-input', {
+    template: `<div>
+      <input ref="inputRef"/>
+    </div>`,
+    created() {
+      console.log('created')
+    },
+    destroyed() {
+      console.log('destroyed')
+    },
+  })
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+        showInput: false
+      }
+    },
+    methods: {
+      async onFocus(){
+        setTimeout(()=>{
+          this.$refs.myInputRef.$refs.inputRef.focus()
+        })
+        this.showInput = true
+        //改变数据,dom渲染,组件创建
+        //是异步的操作
+        //  微任务(Promise.then)
+        //  宏任务(setTimout)
+
+        // 新建微任务
+        /*
+        let p = new Promise((resovle, reject)=>{
+          resovle()
+        })
+        p.then(()=>{
+          this.$refs.myInputRef.$refs.inputRef.focus()
+        })
+        */
+        // 新建微任务,await简化.then的接收
+        /*
+        await new Promise((resovle, reject)=>{
+          resovle()
+        })
+        this.$refs.myInputRef.$refs.inputRef.focus()
+        */
+        // 新建微任务,语法糖Promise.resolve
+        /*
+        Promise.resolve().then(()=>{
+          this.$refs.myInputRef.$refs.inputRef.focus()
+        })
+        */
+        /*
+        await Promise.resolve()
+        this.$refs.myInputRef.$refs.inputRef.focus()
+        */
+        // 新建微任务, 通过this.$nextTick
+        /*
+        this.$nextTick(()=>{
+          this.$refs.myInputRef.$refs.inputRef.focus()
+        })
+        */
+       // 新建微任务, 通过this.$nextTick+nextTick
+       /*
+        await this.$nextTick()
+        this.$refs.myInputRef.$refs.inputRef.focus()
+        */
+      }
+    }
+  })
+</script>
+</html>

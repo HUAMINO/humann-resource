@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- :-变量和表达式 -->
+    <!-- 不加:-字符串 -->
+    <my-input :value="username" type="password" id="test"></my-input>
+  </div>
+</body>
+<script>
+  // $attr针对组件,用来接受不被props接受东西
+  // 用到一部分props,一部分$attr
+  /*
+  Vue.component('my-input', {
+    props: {
+      value: {
+        type: String,
+        required: true
+      }
+    },
+    template: `
+      <div>
+        <input :value="value" :type="$attrs.type"/>
+      </div>
+    `
+  })
+  */
+
+  //标准写法
+  /*
+  Vue.component('my-input', {
+    template: `
+      <div>
+        <input :value="$attrs.value" :type="$attrs.type"/>
+      </div>
+    `
+  })
+  */
+  Vue.component('my-input', {
+    template: `
+      <div>
+        <input v-bind="$attrs"/>
+      </div>
+    `
+  })
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+        username: 'zs'
+      }
+    },
+  })
+</script>
+</html>

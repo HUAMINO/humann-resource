@@ -49,7 +49,7 @@
               <el-button type="text">转正</el-button>
               <el-button type="text">调岗</el-button>
               <el-button type="text">离职</el-button>
-              <el-button type="text">角色</el-button>
+              <el-button type="text" @click="onShowAsignRoleDialog(row.id)">角色</el-button>
               <el-button type="text" @click="onDel(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -121,18 +121,34 @@
         <el-button type="primary" @click="handelConfirm">确定</el-button>
       </el-row>
     </el-dialog>
+    <el-dialog
+      title="分配角色"
+      :visible.sync="showAsignRoleDialog"
+      width="50%"
+      @close="showAsignRoleDialog = false"
+    >
+      <el-checkbox-group v-model="roleIds">
+        <el-checkbox v-for="(item, index) in roleList" :key="index" :label="item.id">{{ item.name }}</el-checkbox>
+      </el-checkbox-group>
+      <el-row slot="footer" type="flex" justify="center">
+        <el-button @click="showAsignRoleDialog = false">取消</el-button>
+        <el-button type="primary" @click="asignRole">确认</el-button>
+      </el-row>
+    </el-dialog>
 
   </div>
 </template>
 
 <script>
-import { addEmployee, getEmployees, delEmployee } from '@/api/employees'
+import { addEmployee, getEmployees, delEmployee, assignRoles } from '@/api/employees'
 import QrcodeVue from 'qrcode.vue'
 import employeesEnum from '@/api/constant/employees'
 import { getList } from '@/api/department'
 import { trnslateListToTree } from '@/utils'
 import _ from 'lodash'
 import { formatdate, formatHireType } from '@/filter'
+import { getEmplyeeBaseInfo } from '@/api/user'
+import { getRoleList } from '@/api/settings'
 
 export default {
   name: 'Employees',
@@ -198,7 +214,11 @@ export default {
       },
       formOfEmploymentOptions: employeesEnum.hireType,
       depts: [],
-      showTree: false
+      showTree: false,
+      showAsignRoleDialog: false,
+      roleList: [],
+      roleIds: [],
+      userId: undefined
     }
   },
   created() {
@@ -286,6 +306,22 @@ export default {
           bookType: 'xlsx' // 非必填
         })
       })
+    },
+    async onShowAsignRoleDialog(id) {
+      const { roleIds } = await getEmplyeeBaseInfo(id)
+      this.roleIds = roleIds
+      const { rows } = await getRoleList({ page: 1, pagesize: 50 })
+      this.roleList = rows
+      this.showAsignRoleDialog = true
+      this.userId = id
+    },
+    async asignRole() {
+      await assignRoles({
+        id: this.userId,
+        roleIds: this.roleIds
+      })
+      this.showAsignRoleDialog = false
+      this.$message.success('操作成功')
     }
   }
 }

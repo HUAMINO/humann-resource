@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 原始方式 -->
+    <!-- <input v-on:input="onInput"/> -->
+    <!-- 简化写法 -->
+    <!-- <input @input="onInput"/> -->
+    <!-- 简化多个数据绑定 -->
+    <!-- <input @input="onInput" @keyup="onKeyup"/> -->
+    <!-- 不可以 -->
+    <!-- <input @="obj"/> -->
+    <!-- 可以 -->
+    <input v-on="obj"/>
+  </div>
+</body>
+<script>
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+        obj: {
+          input(){
+            console.log('input')
+          },
+          keyup(){
+            console.log('keyup')
+          }
+        }
+      }
+    },
+    methods: {
+    },
+  })
+</script>
+</html>

@@ -2,7 +2,11 @@
   <el-card class="page-tools">
     <el-row type="flex">
       <el-col>
-        <div class="before">
+        <!-- <div class="before">
+          <i class="el-icon-info" />
+          <slot name="before"></slot>
+        </div> -->
+        <div v-if="$slots.before" class="before">
           <i class="el-icon-info" />
           <slot name="before"></slot>
         </div>
@@ -17,6 +21,12 @@
 </template>
 <script>
 export default {
+  props: {
+    showBefore: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
 

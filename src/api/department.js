@@ -39,3 +39,4 @@ export function UpdateDept(data) {
     data
   })
 }
+export const getDepartments = getList

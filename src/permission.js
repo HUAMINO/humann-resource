@@ -13,9 +13,28 @@ router.beforeEach(async(to, from, next) => {
   }
 
   if (store.state.user.token) {
+    /**
+     * 简单写法
+     * 不用vuex
+     * **/
     // 如果获取用户信息为空
     if (!store.state.user.userInfo.userId) {
-      await store.dispatch('user/getUserInfo')
+      // const { roles: { menus }} = await store.dispatch('user/getUserInfo')
+      // console.log(menus, 'menus')
+      // const filterRoutes = asyncRoutes.filter(t => menus.some(m => m.includes(t.children[0].name)))
+      // router.addRoutes([
+      //   ...filterRoutes,
+      //   { path: '*', redirect: '/404', hidden: true }
+      // ])
+      // router.options.routes = [...constantRoutes, ...filterRoutes]
+      /* 方法二  */
+      const { roles: { menus }} = await store.dispatch('user/getUserInfo')
+      const filterRoutes = await store.dispatch('permission/filterRoutes', menus)
+      router.addRoutes([
+        ...filterRoutes,
+        { path: '*', redirect: '/404', hidden: true }
+      ])
+      next(to.path)
     }
     next()
   } else {

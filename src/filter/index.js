@@ -6,10 +6,10 @@
 
 // 高级写法
 import moment from 'moment'
-export const formatdate = (val) => {
-  return moment(val).format('YYYY-MM-DD')
+export const formatdate = (val, format = 'YYYY-MM-DD') => {
+  return moment(val).format(format)
 }
-
+export const formatDate = formatdate
 // 枚举模块
 import employeesEnum from '@/api/constant/employees'
 export const formatHireType = val => {

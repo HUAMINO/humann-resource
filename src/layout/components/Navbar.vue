@@ -8,6 +8,9 @@
     <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
+      <Screenfull class="right-menu-item hover-effect"></Screenfull>
+      <ThemePicker class="right-menu-item hover-effect"></ThemePicker>
+      <LangSelect class="right-menu-item hover-effect"></LangSelect>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <!-- <img src="@/assets/common/bigUserHeader.png" class="user-avatar">
@@ -105,7 +108,7 @@ export default {
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
+      // vertical-align: text-bottom;
 
       &.hover-effect {
         cursor: pointer;

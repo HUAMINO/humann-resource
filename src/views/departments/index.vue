@@ -18,7 +18,7 @@
         <el-tree v-loading="isLoading" :data="list" :props="{label: 'name'}" default-expand-all>
           <template v-slot="{data}">
             <tree-tool :data="data">
-              <el-dropdown-item @click.native="onAdd(data)">添加子部门</el-dropdown-item>
+              <el-dropdown-item v-if="hasPerm('add-dept')" @click.native="onAdd(data)">添加子部门</el-dropdown-item>
               <el-dropdown-item @click.native="onEdit(data)">编辑部门  </el-dropdown-item>
               <el-dropdown-item @click.native="onDel(data.id)">删除部门</el-dropdown-item>
             </tree-tool>

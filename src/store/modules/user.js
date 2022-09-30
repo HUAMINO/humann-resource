@@ -19,11 +19,11 @@ export default {
     async getUserInfo(context) {
       const u = await getUserBaseInfo()
       const e = await getEmplyeeBaseInfo(u.userId)
-      console.log(u)
-      console.log(e)
+      const o = { ...u, ...e }
       // const o = { ...u, ...e }
       // o.staffPhoto = 'http://q6cu3t6jv.bkt.clouddn.com/1063705989926227968?t=1582797590950' // 模拟找不到图片
-      context.commit('setUserInfo', { ...u, ...e })
+      context.commit('setUserInfo', o)
+      return o
     }
 
   },

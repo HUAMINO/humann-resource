@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-container">
-    <div>{{ $i18n.t('title') }}</div>
+    <!-- <div>{{ $i18n.t('title') }}</div>
     <div>{{ $t('title') }}</div>
-    <button @click="setLang">切换</button>
+    <button @click="setLang">切换</button> -->
     <!-- 头部内容 -->
     <el-card class="header-card">
       <div>

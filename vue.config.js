@@ -52,7 +52,13 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
+    externals: process.env.NODE_ENV === 'production' ? {
+      moment: 'window.moment',
+      vue: 'Vue',
+      xlsx: 'XLSX',
+      'element-ui': 'ELEMENT'
+    } : {}
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload

@@ -5,7 +5,7 @@ import app from './modules/app'
 import settings from './modules/settings'
 import user from './modules/user'
 import permission from './modules/permission'
-
+import tagsView from './modules/tagsView'
 Vue.use(Vuex)
 
 // 定义模块
@@ -28,7 +28,8 @@ const store = new Vuex.Store({
     settings,
     user,
     test,
-    permission
+    permission,
+    tagsView
   },
   getters: {
     // showCount(state) {
